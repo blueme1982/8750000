@@ -4,6 +4,15 @@ import re
 import io
 from components.ui import section, card, info_box, header, result_box, action_button
 
+# 연호 변환기
+
+import streamlit as st
+
+# 인증 상태 확인
+if 'authentication_status' not in st.session_state or not st.session_state['authentication_status']:
+    st.error('이 페이지에 접근하려면 로그인이 필요합니다.')
+    st.stop()
+
 # 페이지 설정
 st.set_page_config(
     page_title="연호 변환기",
