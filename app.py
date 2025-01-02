@@ -30,9 +30,8 @@ if 'name' not in st.session_state:
 if 'username' not in st.session_state:
     st.session_state['username'] = None
 
-# 인증 설정 로드
-with open('config.yaml', encoding='utf-8') as file:
-    config = yaml.load(file, Loader=SafeLoader)
+# Streamlit Secrets에서 인증 설정 로드
+config = st.secrets
 
 # 인증 객체 생성
 authenticator = stauth.Authenticate(
