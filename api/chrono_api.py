@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import re
 from typing import Optional
@@ -7,6 +8,15 @@ app = FastAPI(
     title="연호 변환 API",
     description="단기/일본 연호를 서기로 변환하는 API",
     version="1.0.0"
+)
+
+# CORS 설정 추가
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 모든 도메인 허용
+    allow_credentials=True,
+    allow_methods=["*"],  # 모든 HTTP 메서드 허용
+    allow_headers=["*"],  # 모든 헤더 허용
 )
 
 class YearInput(BaseModel):
@@ -138,7 +148,7 @@ def convert_to_segi(era: str, year: int) -> Optional[int]:
     
     return None
 
-@app.post("/convert", response_model=ConversionResult, tags=["연호 변환"])
+@app.post("/api/convert", response_model=ConversionResult, tags=["연호 변환"])
 async def convert_year(input_data: YearInput) -> ConversionResult:
     """연호를 서기로 변환
     
@@ -184,7 +194,7 @@ async def convert_year(input_data: YearInput) -> ConversionResult:
         message=None
     )
 
-@app.get("/", tags=["API 정보"])
+@app.get("/api", tags=["API 정보"])
 async def root():
     """API 정보"""
     return {
@@ -192,7 +202,7 @@ async def root():
         "version": "1.0.0",
         "description": "단기/일본 연호를 서기로 변환하는 API",
         "endpoints": {
-            "/convert": "연호를 서기로 변환 (POST)",
+            "/api/convert": "연호를 서기로 변환 (POST)",
             "/docs": "API 문서 (Swagger UI)",
             "/redoc": "API 문서 (ReDoc)"
         }
