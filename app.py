@@ -31,14 +31,22 @@ if 'username' not in st.session_state:
     st.session_state['username'] = None
 
 # Streamlit Secrets에서 인증 설정 로드
-config = st.secrets
+credentials = {
+    'usernames': st.secrets['credentials']['usernames']
+}
+
+cookie = {
+    'expiry_days': st.secrets['cookie']['expiry_days'],
+    'key': st.secrets['cookie']['key'],
+    'name': st.secrets['cookie']['name']
+}
 
 # 인증 객체 생성
 authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days']
+    credentials,
+    cookie['name'],
+    cookie['key'],
+    cookie['expiry_days']
 )
 
 # 로그인 위젯 표시
